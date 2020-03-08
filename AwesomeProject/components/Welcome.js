@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     fontFamily: 'Montserrat-Regular',
     color: 'white',
-    fontSize: 10,
+    fontSize: hp('2%'),
     // textShadowOffset: {
     //   width: 2,
     //   height: 7,
@@ -80,16 +80,10 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Regular',
     color: 'white',
     marginTop: hp('1%'),
-    fontSize: 17,
+    fontSize: hp('2.7%'),
     letterSpacing: -1,
     width: wp('70%'),
     textAlign: 'center',
-    // textShadowOffset: {
-    //   width: 2,
-    //   height: 7,
-    // },
-    // textShadowRadius: 5,
-    // textShadowColor: 'rgba(0,0,0,0.21)',
   },
   mainButton: {
     width: wp('60%'),
@@ -110,7 +104,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Black',
     // fontWeight: '100',
     color: 'white',
-    marginTop: hp('22%'),
+    marginTop: hp('20%'),
     marginBottom: hp('25%'),
     textShadowOffset: {
       // width: 2,
@@ -121,7 +115,7 @@ const styles = StyleSheet.create({
     // backgroundColor:'red',
     letterSpacing: -3,
     textAlign: 'center',
-    fontSize: 90,
+    fontSize: hp('15%'),
   },
 });
 

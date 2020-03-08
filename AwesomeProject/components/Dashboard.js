@@ -1,4 +1,4 @@
-import React, {Component, useState, useEffect} from 'react';
+import React, {Component, useState, useEffect, setState} from 'react';
 
 import {
   SafeAreaView,
@@ -6,6 +6,8 @@ import {
   ScrollView,
   View,
   Text,
+  Alert,
+  ActivityIndicator,
   Image,
   StatusBar,
   ImageBackground,
@@ -17,37 +19,50 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {TouchableOpacity, TextInput} from 'react-native-gesture-handler';
+import {
+  TouchableOpacity,
+  TextInput,
+  LongPressGestureHandler,
+} from 'react-native-gesture-handler';
 import 'react-native-gesture-handler';
 import {NavigationContainer} from '@react-navigation/native';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
 
+console.disableYellowBox;
 const Dashboard = ({navigation}) => {
   // BACKEND CONNECTION
 
   // this line is for setting the states and declaring the variables
   // Here will load is a state and setwillLoad is a function for that
 
+  function _onLongPressButton() {
+    Alert.alert('You long-pressed the button!');
+  }
+  const [loading, setLoading] = useState(false);
   const [LoadIt, setLoadIt] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
-      fetch('http://192.168.42.241:3000/read', {
-        method: 'GET',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-      })
-        .then(response => response.json())
-        .then(responseJson => {
+      try {
+        setLoading(true);
+        let response = await fetch('http://192.168.42.109:3000/read', {
+          method: 'GET',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+        });
+        let responseJson = await response.json();
+        function finishIt() {
           setLoadIt(() => {
             return responseJson;
           });
-        })
-        .catch(error => {
-          console.error(error);
-        });
+          setLoading(false);
+        }
+        finishIt();
+      } catch (error) {
+        console.error(error);
+      }
     }
     fetchData();
   }, []);
@@ -85,6 +100,34 @@ const Dashboard = ({navigation}) => {
   // }, []);
 
   // BACKEND OVER
+  function displayData() {
+    if (loading) {
+      return (
+        <View style={{flex: 1, padding: 20, marginTop: hp('20%')}}>
+          <ActivityIndicator size="large" color={'blue'} />
+        </View>
+      );
+    } else {
+      return (
+        <FlatList
+          data={LoadIt}
+          renderItem={({item}) => (
+            <TouchableOpacity style={styles.Card}>
+              <View style={styles.LeftData}>
+                <Text style={styles.CardHeading}>{item.heading}</Text>
+                <Text style={styles.CardDate}>{item.date}</Text>
+                <Text style={styles.CardTime}>{item.time}</Text>
+              </View>
+              <View style={styles.RightData}>
+                <Text style={styles.CardDescription}>{item.content}</Text>
+              </View>
+            </TouchableOpacity>
+          )}
+          keyExtractor={({id}, index) => id}
+        />
+      );
+    }
+  }
   return (
     <SafeAreaView>
       <ImageBackground
@@ -95,7 +138,6 @@ const Dashboard = ({navigation}) => {
           translucent
           barStyle="dark-content"
         />
-
         <View style={styles.MainContainer}>
           <View style={styles.NavContainer}>
             <View style={styles.NavNavigation}>
@@ -125,8 +167,7 @@ const Dashboard = ({navigation}) => {
             </View>
           </View>
           <ScrollView contentContainerStyle={styles.contentContainer}>
-            {/* <View style={styles.CardContainer}> */}
-            <FlatList
+            {/* <FlatList
               data={LoadIt}
               renderItem={({item}) => (
                 <TouchableOpacity style={styles.Card}>
@@ -141,9 +182,10 @@ const Dashboard = ({navigation}) => {
                 </TouchableOpacity>
               )}
               keyExtractor={({id}, index) => id}
-            />
+            /> */}
+            {displayData()}
 
-            <TouchableOpacity style={styles.Card}>
+            {/* <TouchableOpacity style={styles.Card}>
               <View style={styles.LeftData}>
                 <Text style={styles.CardHeading}>Meeting Tomorrow</Text>
                 <Text style={styles.CardDate}>25 Mar 2020</Text>
@@ -156,22 +198,8 @@ const Dashboard = ({navigation}) => {
                   laudantium error numquam quo,
                 </Text>
               </View>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.Card}>
-              <View style={styles.LeftData}>
-                <Text style={styles.CardHeading}>Meeting Tomorrow</Text>
-                <Text style={styles.CardDate}>25 Mar 2020</Text>
-                <Text style={styles.CardTime}>11:50 AM</Text>
-              </View>
-              <View style={styles.RightData}>
-                <Text style={styles.CardDescription}>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Eligendi maxime reprehenderit quae facilis! Dicta aperiam quod
-                  laudantium error numquam quo,
-                </Text>
-              </View>
-            </TouchableOpacity>
-            {/* </View> */}
+            </TouchableOpacity> */}
+
           </ScrollView>
           <View style={styles.btnContainer}>
             <TouchableOpacity
@@ -228,7 +256,7 @@ const styles = StyleSheet.create({
   SearchText: {
     fontFamily: 'Muli-Light',
     // marginTop: '3%',
-    fontSize: 11,
+    fontSize: hp('1.5%'),
     color: 'grey',
   },
 
@@ -253,7 +281,7 @@ const styles = StyleSheet.create({
   NavHeading: {
     fontFamily: 'Montserrat-Bold',
     // alignSelf: 'center',
-    fontSize: 23,
+    fontSize: hp('3.8%'),
     width: wp('60%'),
     color: 'black',
     // backgroundColor: 'red',
@@ -272,7 +300,7 @@ const styles = StyleSheet.create({
     marginTop: '4%',
     borderRadius: 10,
     backgroundColor: 'white',
-    // elevation: 0.5,
+    // elevation: 1,
   },
   LeftData: {
     marginVertical: '3%',
@@ -285,25 +313,25 @@ const styles = StyleSheet.create({
   },
   CardHeading: {
     fontFamily: 'Montserrat-SemiBold',
-    fontSize: 12,
+    fontSize: hp('1.8%'),
     color: 'black',
   },
   CardDate: {
     fontFamily: 'Montserrat-Regular',
-    fontSize: 10,
+    fontSize: hp('1.4%'),
     marginTop: '5%',
     color: 'grey',
   },
   CardTime: {
     fontFamily: 'Montserrat-Regular',
-    fontSize: 8,
+    fontSize: hp('1.2%'),
     marginTop: '5%',
     color: 'silver',
   },
   CardDescription: {
-    alignSelf: 'center',
+    // alignSelf: 'center',
     fontFamily: 'Muli-Light',
-    fontSize: 10,
+    fontSize: hp('1.4%'),
     color: 'grey',
   },
   btnContainer: {
@@ -319,7 +347,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     display: 'flex',
     flexDirection: 'row',
-    elevation: 2,
+    elevation: 3,
     padding: 6,
     justifyContent: 'space-around',
     borderRadius: 200,
@@ -327,7 +355,7 @@ const styles = StyleSheet.create({
   },
   buttonHeading: {
     fontFamily: 'Montserrat-Bold',
-    fontSize: 15,
+    fontSize: hp('2.3%'),
     textAlignVertical: 'center',
     // marginTop: '5%',
   },
@@ -345,7 +373,7 @@ const styles = StyleSheet.create({
     // top: hp('0.3%'),
     //  backgroundColor: 'red',
     height: hp('3%'),
-    width: wp('5.3%'),
+    width: wp('6.3%'),
   },
 });
 

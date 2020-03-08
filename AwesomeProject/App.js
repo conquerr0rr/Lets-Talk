@@ -48,7 +48,6 @@ import Dashboard from '../AwesomeProject/components/Dashboard';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
-
 const App: () => React$Node = () => {
   return (
     // <NavigationContainer>

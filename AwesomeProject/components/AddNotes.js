@@ -15,13 +15,13 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import {TouchableOpacity, TextInput} from 'react-native-gesture-handler';
-
+import Dashboard from './Dashboard';
 const AddNotes = ({navigation}) => {
   const [heading, setHeading] = useState('');
   const [content, setContent] = useState('');
 
   function addDATA() {
-    fetch('http://192.168.42.241:3000/create', {
+    fetch('http://192.168.42.109:3000/create', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
   NavHeading: {
     fontFamily: 'Montserrat-Bold',
     // alignSelf: 'center',
-    fontSize: 23,
+    fontSize: hp('3.8%'),
     width: wp('56%'),
     color: 'black',
     // backgroundColor: 'red',
@@ -154,27 +154,29 @@ const styles = StyleSheet.create({
   ContentHeading: {
     alignSelf: 'center',
     fontFamily: 'Montserrat-Bold',
-    fontSize: 15,
+    fontSize: hp('2.5%'),
   },
   HeadingInput: {
     height: hp('10%'),
     width: wp('80%'),
     borderRadius: 20,
-    elevation: 1,
+    borderWidth: 1,
+    borderColor: 'silver',
     textAlign: 'center',
     alignSelf: 'center',
   },
   ContentData: {
     alignSelf: 'center',
     fontFamily: 'Montserrat-Bold',
-    fontSize: 15,
+    fontSize: hp('2.5%'),
     marginTop: hp('3%'),
   },
   DataInput: {
     height: hp('50%'),
     width: wp('80%'),
     borderRadius: 20,
-    elevation: 1,
+    borderWidth: 1,
+    borderColor: 'silver',
     textAlign: 'center',
     alignSelf: 'center',
   },
@@ -213,14 +215,14 @@ const styles = StyleSheet.create({
   },
   buttonHeading: {
     fontFamily: 'Montserrat-Bold',
-    fontSize: 15,
+    fontSize: hp('2.2%'),
     textAlignVertical: 'center',
     // marginTop: '5%',
   },
   buttonImg: {
-    height: hp('5%'),
-    width: wp('9%'),
-    top: hp('0.5%'),
+    height: hp('4%'),
+    width: wp('7%'),
+    marginVertical: '6%',
   },
 });
 

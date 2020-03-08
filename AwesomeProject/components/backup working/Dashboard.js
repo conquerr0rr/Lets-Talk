@@ -26,25 +26,25 @@ const Dashboard = ({navigation}) => {
 
   // this line is for setting the states and declaring the variables
   // Here will load is a state and setwillLoad is a function for that
-  const [LoadIt, setLoadIt] = useState();
+  // const [LoadIt, setLoadIt] = useState();
 
-  useEffect(() => {
-    fetch('http://192.168.42.81:3000/read', {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => response.json())
-      .then(responseJson => {
-        setLoadIt(responseJson);
-        return responseJson;
-      })
-      .catch(error => {
-        console.error(error);
-      });
-  }, [LoadIt]);
+  // useEffect(() => {
+  //   fetch('http://192.168.42.81:3000/read', {
+  //     method: 'GET',
+  //     headers: {
+  //       Accept: 'application/json',
+  //       'Content-Type': 'application/json',
+  //     },
+  //   })
+  //     .then(response => response.json())
+  //     .then(responseJson => {
+  //       setLoadIt(responseJson);
+  //       return responseJson;
+  //     })
+  //     .catch(error => {
+  //       console.error(error);
+  //     });
+  // }, [LoadIt]);
 
   // BACKEND OVER
   return (
@@ -116,7 +116,7 @@ const Dashboard = ({navigation}) => {
               )}
               keyExtractor={({id}, index) => id}
             /> */}
-            <FlatList
+            {/* <FlatList
               data={LoadIt}
               renderItem={({item}) => (
                 <Text>
@@ -124,7 +124,7 @@ const Dashboard = ({navigation}) => {
                 </Text>
               )}
               keyExtractor={({id}, index) => id}
-            />
+            /> */}
             <TouchableOpacity style={styles.Card}>
               <View style={styles.LeftData}>
                 <Text style={styles.CardHeading}>Meeting Tomorrow</Text>
@@ -305,6 +305,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     display: 'flex',
     flexDirection: 'row',
+    borderColor: 'grey',
+    borderWidth: 1,
+    borderStyle: 'solid',
     elevation: 2,
     padding: 6,
     justifyContent: 'space-around',
